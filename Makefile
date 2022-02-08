@@ -1,14 +1,14 @@
 NAME		=	goose
 
-SRCS		=	main.c
+SRCS		=	main.c mlx_utils.c
 
 _OBJS		=	${SRCS:.c=.o}
 OBJS		=	$(addprefix build/, $(_OBJS))
 
 CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra
-INCLUDE		=	-I includes/
-LIBS		=
+INCLUDE		=	-I includes/ -I libs/minilibx-linux
+LIBS		=	libs/minilibx-linux/libmlx.a
 
 
 all		:	$(NAME)
@@ -20,7 +20,7 @@ build/%.o	:	srcs/%.c
 	$(CC) ${CFLAGS} ${INCLUDE} -c $< -o $@
 
 $(NAME)	:	$(OBJS) | libs
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -lXext -lX11 -o $(NAME)
 
 libs	:
 	@for lib in $(LIBS); do\
