@@ -25,9 +25,12 @@ void	*mlx_new_window(t_xvar *xvar,int size_x,int size_y,char *title)
 	XSetWindowAttributes	xswa;
 	XGCValues				xgcv;
 
+	XVisualInfo vinfo;
+    XMatchVisualInfo(xvar->display, DefaultScreen(xvar->display), xvar->depth, TrueColor, &vinfo);
+
 	xswa.background_pixel = 0;
 	xswa.border_pixel = -1;
-	xswa.colormap = xvar->cmap;
+    xswa.colormap = XCreateColormap(xvar->display, DefaultRootWindow(xvar->display), vinfo.visual, AllocNone);
 	/*
 	xswa.event_mask = ButtonPressMask | ButtonReleaseMask | ExposureMask |
 		KeyPressMask | KeyReleaseMask | StructureNotifyMask;
@@ -37,9 +40,9 @@ void	*mlx_new_window(t_xvar *xvar,int size_x,int size_y,char *title)
 	if (!(new_win = malloc(sizeof(*new_win))))
 		return ((void *)0);
 	new_win->window = XCreateWindow(xvar->display,xvar->root,0,0,size_x,size_y,
-					0,CopyFromParent,InputOutput,xvar->visual,
+					0,vinfo.depth,InputOutput,vinfo.visual,
 					CWEventMask|CWBackPixel|CWBorderPixel|
-					CWColormap|CWOverrideRedirect,&xswa);
+					CWColormap,&xswa);
 	mlx_int_anti_resize_win(xvar,new_win->window,size_x,size_y);
 	XStoreName(xvar->display,new_win->window,title);
 	XSetWMProtocols(xvar->display, new_win->window, &(xvar->wm_delete_window), 1);
