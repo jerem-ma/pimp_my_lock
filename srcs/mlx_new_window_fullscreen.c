@@ -27,9 +27,13 @@ void	*mlx_new_window_fullscreen(t_xvar *xvar, char *title)
 	int						size_x;
 	int						size_y;
 
-	xswa.background_pixel = 0;
+	XVisualInfo vinfo;
+    XMatchVisualInfo(xvar->display, DefaultScreen(xvar->display), 32, TrueColor, &vinfo);
+
+	xswa.background_pixel = 0xFF000000;
 	xswa.border_pixel = -1;
 	xswa.colormap = xvar->cmap;
+    xswa.colormap = XCreateColormap(xvar->display, DefaultRootWindow(xvar->display), vinfo.visual, AllocNone);
 	xswa.override_redirect = 1;
 	xswa.cursor = None;
 	/*
@@ -42,7 +46,7 @@ void	*mlx_new_window_fullscreen(t_xvar *xvar, char *title)
 		return ((void *)0);
 	mlx_get_screen_size(xvar, &size_x, &size_y);
 	new_win->window = XCreateWindow(xvar->display,xvar->root,0,0, size_x, size_y,
-					0,CopyFromParent,InputOutput,xvar->visual,
+					0,vinfo.depth,InputOutput,vinfo.visual,
 					CWEventMask|CWBackPixel|CWBorderPixel|
 					CWColormap|CWOverrideRedirect|CWCursor,&xswa);
 	mlx_int_anti_resize_win(xvar,new_win->window,size_x,size_y);
