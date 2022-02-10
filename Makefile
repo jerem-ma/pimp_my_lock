@@ -1,6 +1,6 @@
 NAME		=	goose
 
-SRCS		=	main.c mlx_utils.c mlx_new_window_fullscreen.c farbfeld_to_img.c \
+SRCS		=	main.c mlx_utils.c mlx_new_window_fullscreen.c farbfeld_to_img.c mlx_new_window_without_border.c\
 				files.c
 
 _OBJS		=	${SRCS:.c=.o}
