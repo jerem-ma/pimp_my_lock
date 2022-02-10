@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   goose.h                                            :+:      :+:    :+:   */
+/*   farbfeld_to_img.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/13 15:55:57 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/10 16:38:58 by jmaia            ###   ########.fr       */
+/*   Created: 2022/02/10 16:21:31 by jmaia             #+#    #+#             */
+/*   Updated: 2022/02/10 16:22:58 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GOOSE_H
-# define GOOSE_H
-
-# include <X11/Xlib.h>
-# include <stdio.h>
-# include <unistd.h>
+#ifndef FARBFELD_TO_IMG
+# define FARBFELD_TO_IMG
 
 # include "mlx.h"
 # include "mlx_int.h"
-# include "mlx_ext.h"
 
-# include "farbfeld_to_img.h"
+# include "files.h"
 
-void    destroy_everything(t_xvar *mlx_ptr, t_win_list *w_list);
+t_img	*farbfeld_to_img(t_xvar *mlx_ptr, const char *path);
 
 #endif
