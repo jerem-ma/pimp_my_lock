@@ -30,7 +30,7 @@ void	*mlx_new_window_fullscreen(t_xvar *xvar, char *title)
 	XVisualInfo vinfo;
     XMatchVisualInfo(xvar->display, DefaultScreen(xvar->display), 32, TrueColor, &vinfo);
 
-	xswa.background_pixel = 0xFF000000;
+	xswa.background_pixel = 0x00000000;
 	xswa.border_pixel = -1;
 	xswa.colormap = xvar->cmap;
     xswa.colormap = XCreateColormap(xvar->display, DefaultRootWindow(xvar->display), vinfo.visual, AllocNone);
