@@ -6,15 +6,14 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 15:27:43 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/10 17:48:15 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/02/11 16:01:16 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "farbfeld_to_img.h"
 
 static int	parse_header(t_file *file, unsigned int *width,
-		unsigned int *height);
-static int	skip_magic_value(t_file *file);
+				unsigned int *height);
 static int	get_n_next_bytes(t_file *file, char *bytes, int n);
 static void	reverse(char *array, int len);
 static int	get_pixels(t_file *file, unsigned int *data);
@@ -46,12 +45,12 @@ t_img	*farbfeld_to_img(t_xvar *mlx_ptr, const char *path)
 	return (img);
 }
 
-static int parse_header(t_file *file, unsigned int *width,
+static int	parse_header(t_file *file, unsigned int *width,
 		unsigned int *height)
 {
 	int	err;
 
-	err = !skip_magic_value(file);
+	err = !(get_n_next_bytes(file, 0, 8) != 8);
 	err += get_n_next_bytes(file, (char *)width, 4) != 4;
 	err += get_n_next_bytes(file, (char *)height, 4) != 4;
 	reverse((char *)width, 4);
@@ -74,11 +73,6 @@ static void	reverse(char *array, int len)
 		array[len - i - 1] = tmp;
 		i++;
 	}
-}
-
-static int	skip_magic_value(t_file *file)
-{
-	return (get_n_next_bytes(file, 0, 8) != 8);
 }
 
 static int	get_n_next_bytes(t_file *file, char *bytes, int n)
@@ -119,4 +113,3 @@ static int	get_pixels(t_file *file, unsigned int *data)
 	}
 	return (0);
 }
-

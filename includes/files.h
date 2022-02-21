@@ -6,7 +6,7 @@
 /*   By: jmaia <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/24 12:31:46 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/10 16:23:37 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/02/11 14:56:49 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define SIZE_BUF 50
 # include <fcntl.h>
 # include <unistd.h>
+
 typedef struct s_file
 {
 	int		fd;

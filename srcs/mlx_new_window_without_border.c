@@ -19,7 +19,7 @@
 #include	"mlx_int.h"
 
 
-void	*mlx_new_window_without_border(t_xvar *xvar,int size_x,int size_y,char *title)
+void	*mlx_new_window_without_border(t_xvar *xvar, int x, int y, int size_x,int size_y,char *title)
 {
 	t_win_list				*new_win;
 	XSetWindowAttributes	xswa;
@@ -30,7 +30,8 @@ void	*mlx_new_window_without_border(t_xvar *xvar,int size_x,int size_y,char *tit
 
 	xswa.background_pixel = 0;
 	xswa.border_pixel = -1;
-    xswa.colormap = XCreateColormap(xvar->display, DefaultRootWindow(xvar->display), vinfo.visual, AllocNone);
+//    xswa.colormap = XCreateColormap(xvar->display, DefaultRootWindow(xvar->display), vinfo.visual, AllocNone);
+	xswa.colormap = xvar->cmap;
 	xswa.override_redirect = 1;
 	/*
 	xswa.event_mask = ButtonPressMask | ButtonReleaseMask | ExposureMask |
@@ -40,8 +41,8 @@ void	*mlx_new_window_without_border(t_xvar *xvar,int size_x,int size_y,char *tit
 	xswa.event_mask = 0xFFFFFF;	/* all events */
 	if (!(new_win = malloc(sizeof(*new_win))))
 		return ((void *)0);
-	new_win->window = XCreateWindow(xvar->display,xvar->root,0,0,size_x,size_y,
-					0,vinfo.depth,InputOutput,vinfo.visual,
+	new_win->window = XCreateWindow(xvar->display,xvar->root,x,y,size_x,size_y,
+					0,CopyFromParent,InputOutput,xvar->visual,
 					CWEventMask|CWBackPixel|CWBorderPixel|CWOverrideRedirect|CWColormap,&xswa);
 	mlx_int_anti_resize_win(xvar,new_win->window,size_x,size_y);
 	XStoreName(xvar->display,new_win->window,title);
