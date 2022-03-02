@@ -6,7 +6,7 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 16:13:07 by jmaia             #+#    #+#             */
-/*   Updated: 2022/02/17 16:00:54 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/03/02 16:19:56 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ static void	remove_input(t_xvar *mlx_ptr, t_win_list *w_list)
 	XserverRegion	region;
 	XRectangle		rect;
 
+	memset(&rect, 0, sizeof(rect));
 	region = XFixesCreateRegion(mlx_ptr->display, &rect, 1);
 	XFixesSetWindowShapeRegion(mlx_ptr->display, w_list->window, ShapeInput,
 		0, 0, region);
