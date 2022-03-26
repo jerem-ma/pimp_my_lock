@@ -15,49 +15,23 @@ CFLAGS		=	-Wall -Werror -Wextra
 INCLUDE		=	-I includes/ -I libs/minilibx-linux
 LIBS		=	libs/minilibx-linux/libmlx.a
 
-
-#====================Scripts=======================#
-define count_files
-endef
-
-define file_compiled
-endef
-
-define draw_bar
-endef
-
-define clean
-endef
-
-#==================================================#
-
-
-all		:	
-			@$(call count_files)
-			@make -s $(NAME) || $(MAKE) reset
+all		:	$(NAME)
 
 build/%.o	:	srcs/%.c
 	@if [ ! -d $(dir $@) ]; then\
 		mkdir -p $(dir $@);\
 	fi
-	@$(call draw_bar)
-	@echo "\r$(CYAN)Compiling $(BLUE)$@ ...$(NO_COLOR)                             "
-	@$(call draw_bar) 
 	@$(CC) ${CFLAGS} ${INCLUDE} -c $< -o $@
-	@$(call file_compiled)
-			@$(call draw_bar)
 
 $(NAME)	:	$(OBJS) | libs
-	@@echo "$(ORANGE)Linking $(BLUE)$@ ...$(NO_COLOR)"
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -L libs -lXfixes -lXext -lX11 -lvlc -o $(NAME)
-	@$(call clean)
-	@echo "$(GREEN)$@ created !$(NO_COLOR)"
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -L libs -lXfixes -lXext -lX11 -lvlc -o $(NAME)
 
 libs	:
 	@for lib in $(LIBS); do\
 		echo make -C $$(dirname $$lib);\
 		make -C $$(dirname $$lib);\
 	done
+
 
 clean	:	
 	rm -Rf build/
@@ -90,9 +64,6 @@ re		:	fclean
 relibs	:
 
 reall	: relibs re
-
-reset:
-		@$(call clean)
 
 
 .PHONY	:	all libs clean cleanlibs cleanall fclean fcleanlibs fcleanall re relibs reall reset
