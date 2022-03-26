@@ -6,18 +6,22 @@
 /*   By: jmaia <jmaia@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 16:13:07 by jmaia             #+#    #+#             */
-/*   Updated: 2022/03/02 16:19:56 by jmaia            ###   ########.fr       */
+/*   Updated: 2022/03/26 14:38:01 by jmaia            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
+
+#include <vlc/vlc.h>
 #include <X11/extensions/shape.h>
 #include <X11/extensions/Xfixes.h>
+#include "mlx.h"
+#include "mlx_int.h"
 
-#include "goose.h"
-
-#include <unistd.h>
-#include <time.h>
-#include <vlc/vlc.h>
+#include "mlx_ext.h"
+#include "mlx_utils.h"
 
 void	play_video(Window w, char *path, libvlc_instance_t **inst,
 			libvlc_media_player_t **mp);
@@ -57,7 +61,7 @@ int	main(int ac, char **av)
 	mlx_ptr = mlx_init();
 	if (!mlx_ptr)
 		return (0);
-	w_list = mlx_new_window_without_border(mlx_ptr, x, y, width, height, "Goose");
+	w_list = mlx_new_window_without_border(mlx_ptr, x, y, width, height, "Pimp my lock");
 	if (!mlx_ptr->win_list)
 	{
 		destroy_everything(mlx_ptr, w_list);

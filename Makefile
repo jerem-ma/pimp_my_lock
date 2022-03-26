@@ -1,14 +1,18 @@
-NAME		=	goose
+NAME		=	pimp_my_lock
 
-SRCS		=	main.c mlx_utils.c farbfeld_to_img.c mlx_new_window_without_border.c play_video.c stop_video.c \
-				files.c goose.c gifdec.c
+SRCS		=	\
+				main.c \
+				mlx_new_window_without_border.c \
+				mlx_utils.c \
+				play_video.c \
+				stop_video.c
 
 _OBJS		=	${SRCS:.c=.o}
 OBJS		=	$(addprefix build/, $(_OBJS))
 
-CC			=	cc
-CFLAGS		=	-Wall -Werror -Wextra -g3
-INCLUDE		=	-I includes/ -I libs/minilibx-linux -I libs/gifdec
+CC			=	clang
+CFLAGS		=	-Wall -Werror -Wextra
+INCLUDE		=	-I includes/ -I libs/minilibx-linux
 LIBS		=	libs/minilibx-linux/libmlx.a
 
 
