@@ -17,6 +17,16 @@ make
 /sgoinfre/goinfre/Perso/jmaia/Public/pimp_my_lock/pimp_my_lock.sh <path_to_media> [<x> <y> [<width> <height>]]
 ```
 
+## How do I change the lock button to Pimp my lock at 42Paris ?
+- Create a script called "$HOME/pimp_my_lock_wrapper.sh" that will start Pimp my lock with your arguments 
+- Disable old lock button: 
+	gnome-extensions disable lockscreen@42network.org
+- Get Pimp my lock's button:
+	cp -R /sgoinfre/goinfre/Perso/jmaia/Public/pimp_my_lock/lockscreen@pimpmylock.sh ~/.local/share/gnome-shell/extensions/
+- Restart your session
+- Enable Pimp my lock's button:
+	gnome-extensions enable lockscreen@pimpmylock.sh
+
 ## Contributing
 1. Fork this repository (https://github.com/jerem-ma/pimp_my_lock/fork)
 2. Create a feature branch
