@@ -2,7 +2,7 @@
 You've got to pimp my lock !
 
 ## Installation
-If you are logged at 42Paris, you can skip to `Usage at 42Paris` section
+If you are logged at 42Paris, you can skip to [Usage at 42Paris](#usage-at-42paris) section
 ```bash
 make
 ```
