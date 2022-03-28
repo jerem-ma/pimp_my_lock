@@ -1,6 +1,8 @@
 # Pimp my lock
 You've got to pimp my lock !
 
+![pimp_my_lock](https://user-images.githubusercontent.com/59874848/160441428-20cb9e1f-bc97-47e9-bdaf-179c2028484d.png)
+
 ## Installation
 If you are logged at 42Paris, you can skip to [Usage at 42Paris](#usage-at-42paris) section
 ```bash
