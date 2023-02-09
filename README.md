@@ -9,6 +9,12 @@ If you are logged at 42Paris, you can skip to [Usage at 42Paris](#usage-at-42par
 make
 ```
 
+### General installation (Ubuntu)
+```bash
+sudo apt install libxfixes-dev libxext-dev libvlc-dev libx11-dev
+```
+If any file are missing during build, try using `apt-file`. See [here](https://wiki.debian.org/apt-file)
+
 ## General usage
 ```bash
 ./pimp_my_lock.sh <path_to_media> [<x> <y> [<width> <height>]]
