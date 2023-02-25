@@ -2,6 +2,7 @@
 
 PROGRAM_NAME=$0
 
+# Args: <media> [<x> <y>] [<width>] [<height>]
 _main()
 {
 	
