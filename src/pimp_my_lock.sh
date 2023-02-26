@@ -5,6 +5,7 @@ PROGRAM_NAME=$0
 # Args: <media> [<x> <y>] [<width>] [<height>]
 _main()
 {
+	_check_dependencies
 	_parse_parameters "$@"
 
 	ft_lock
@@ -15,6 +16,18 @@ _main()
 	_resize_window "$window_id" "$W_WIDTH" "$W_HEIGHT"
 	_wait_for_ft_lock_end
 	kill $pid
+}
+
+_check_dependencies()
+{
+	local dependencies=(ft_lock head column sed cat ffprobe tail pqiv mpv xwininfo grep awk wmctrl xdotool)
+	for dependency in ${dependencies[@]}; do
+		command -v $dependency > /dev/null 2>&1
+		if [[ $? -ne 0 ]]; then
+			echo "$dependency is not installed !" >&2
+			exit 1
+		fi
+	done
 }
 
 # Args: Same as main
@@ -109,7 +122,7 @@ is_pixel_or_percent()
 	if [ $# -lt 1 ]; then
 		echo "Usage: $0 <value>" >&2
 	fi
-	value="$1"
+	local value="$1"
 	[[ "$value" =~ ^[0-9]+%?$ ]]
 	return $?
 }
@@ -232,7 +245,7 @@ _convert_pos()
 		pos=$(echo $pos | sed 's/%//g')
 		m=$((screen_size - window_size))
 		pos=$((m * pos / 100))
-	 fi
+	fi
 	echo $pos
 }
 
