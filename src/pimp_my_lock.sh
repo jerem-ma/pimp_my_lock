@@ -345,8 +345,13 @@ _resize_window()
 
 _wait_for_ft_lock_end()
 {
+	LAST_SECOND=$SECONDS
 	while (xwininfo -name ft_lock > /dev/null 2>&1) ; do
-		xdotool click 1
+		if [[ $LAST_SECOND -ne $SECONDS ]]; then
+			xdotool click 1
+			LAST_SECOND=$SECONDS
+		fi
+		sleep .1
 	done
 }
 
