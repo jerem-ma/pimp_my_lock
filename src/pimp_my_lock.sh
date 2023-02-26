@@ -6,6 +6,10 @@ PROGRAM_NAME=$0
 _main()
 {
 	_parse_parameters "$@"
+
+	ft_lock
+	_wait_for_ft_lock
+	read -d "\n" window_id pid <<< $(_start_media "$MEDIA" "$POS_X" "$POS_Y" "$W_WIDTH" "$W_HEIGHT")
 }
 
 # Args: Same as main
@@ -227,4 +231,52 @@ _convert_pos()
 	 fi
 	echo $pos
 }
+
+# Args: <media> <x> <y> <width> <height>
+# Return: <window_id>\n<pid>
+_start_media()
+{
+	if [ $# -lt 5 ]; then
+		echo "Usage: $0 <media> <x> <y> <width> <height>" >&2
+		exit 1
+	fi
+	local media="$1"
+	local x="$2"
+	local y="$3"
+	local width="$4"
+	local height="$5"
+#	mpv $media --no-input-terminal --geometry="${width}x${height}+${x}+${y}" --loop > /dev/null 2>&1 &
+	pqiv -i -c --action="set_scale_mode_fit_px($width, $height)" $media > /dev/null 2>&1 &
+	local pid=$!
+	local window_media_id=$(_wait_for_window_id_from_pid "$pid")
+	echo -e "$window_media_id\n$pid"
+}
+
+# Args: <pid>
+# Return: window id
+_wait_for_window_id_from_pid()
+{
+	if [ $# -lt 1 ]; then
+		echo "Usage: $0 <pid>" >&2
+		exit 1
+	fi
+	local pid=$1
+	local viewable_success=1
+	while [[ $viewable_success -ne 0 ]]; do
+		local win_id=$(wmctrl -l -p | awk "{if (\$3 == $pid) print \$1"})
+		xwininfo -id $win_id 2> /dev/null | grep "IsViewable" > /dev/null 2>&1
+		local viewable_success=$?
+	done
+	echo $win_id
+}
+
+_wait_for_ft_lock()
+{
+	# TODO Check if it is the right process and not an other window named ft_lock
+	until (xwininfo -name ft_lock 2> /dev/null | grep "IsViewable" > /dev/null 2>&1) ; do
+		true
+		#local =$(xwininfo -tree -root | awk '{if ($2 == "\x22ft_lock\x22\x3A") print $0}')
+	done
+}
+
 _main "$@"; exit
