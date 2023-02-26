@@ -13,6 +13,8 @@ _main()
 	_bring_window_to_top "$window_id"
 	_move_window "$window_id" "$POS_X" "$POS_Y"
 	_resize_window "$window_id" "$W_WIDTH" "$W_HEIGHT"
+	_wait_for_ft_lock_end
+	kill $pid
 }
 
 # Args: Same as main
@@ -320,6 +322,13 @@ _resize_window()
 	local width="$2"
 	local height="$3"
 	xdotool windowsize --sync "$window_id" "$width" "$height"
+}
+
+_wait_for_ft_lock_end()
+{
+	while (xwininfo -name ft_lock > /dev/null 2>&1) ; do
+		xdotool click 1
+	done
 }
 
 _main "$@"; exit
