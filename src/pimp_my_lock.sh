@@ -11,6 +11,8 @@ _main()
 	_wait_for_ft_lock
 	read -d "\n" window_id pid <<< $(_start_media "$MEDIA" "$POS_X" "$POS_Y" "$W_WIDTH" "$W_HEIGHT")
 	_bring_window_to_top "$window_id"
+	_move_window "$window_id" "$POS_X" "$POS_Y"
+	_resize_window "$window_id" "$W_WIDTH" "$W_HEIGHT"
 }
 
 # Args: Same as main
@@ -292,6 +294,32 @@ _bring_window_to_top()
 	xdotool windowunmap --sync $window_id
 	xdotool windowmap --sync $window_id
 	xdotool windowraise $window_id
+}
+
+# Args: <window_id> <x> <y>
+_move_window()
+{
+	if [ $# -lt 3 ]; then
+		echo "Usage: $0 <window_id> <x> <y>" >&2
+		exit 1
+	fi
+	local window_id="$1"
+	local x="$2"
+	local y="$3"
+	xdotool windowmove --sync "$window_id" "$x" "$y"
+}
+
+# Args: <window_id> <width> <height>
+_resize_window()
+{
+	if [ $# -lt 3 ]; then
+		echo "Usage: $0 <window_id> <width> <height>" >&2
+		exit 1
+	fi
+	local window_id="$1"
+	local width="$2"
+	local height="$3"
+	xdotool windowsize --sync "$window_id" "$width" "$height"
 }
 
 _main "$@"; exit
