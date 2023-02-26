@@ -12,8 +12,8 @@ _main()
 	_wait_for_ft_lock
 	read -d "\n" window_id pid <<< $(_start_media "$MEDIA" "$POS_X" "$POS_Y" "$W_WIDTH" "$W_HEIGHT")
 	_bring_window_to_top "$window_id"
-	_move_window "$window_id" "$POS_X" "$POS_Y"
 	_resize_window "$window_id" "$W_WIDTH" "$W_HEIGHT"
+	_move_window "$window_id" "$POS_X" "$POS_Y"
 	_wait_for_ft_lock_end
 	kill $pid
 }
@@ -203,7 +203,12 @@ _parse_parameters()
 # Args: <media>
 _get_media_size()
 {
-	ffprobe -v error -select_streams v:0 -show_entries stream=width,height ~/conga/res/conga-343.mp4 | tail -n +2 | head -n -1 | sed -r 's/[^0-9]//g'
+	if [[ $# -lt 1 ]]; then
+		echo "Usage: $0 <media>" >&2
+		exit 1
+	fi
+	local media="$1"
+	ffprobe -v error -select_streams v:0 -show_entries stream=width,height "$media" | tail -n +2 | head -n -1 | sed -r 's/[^0-9]//g'
 }
 
 # Args: <size> <max_size>
