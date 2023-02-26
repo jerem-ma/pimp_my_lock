@@ -5,7 +5,7 @@ PROGRAM_NAME=$0
 # Args: <media> [<x> <y>] [<width>] [<height>]
 _main()
 {
-	_validate_parameters "$@"
+	_parse_parameters "$@"
 }
 
 # Args: Same as main
@@ -37,13 +37,13 @@ _validate_parameters()
 		exit 1
 	fi
 
-	if ! _is_valid_x "$x"; then
+	if [[ $# -ge 2 ]] && ! _is_valid_x "$x"; then
 		echo "$0: $x: Invalid argument" >&2
 		_help
 		exit 1
 	fi
 
-	if ! _is_valid_y "$y"; then
+	if [[ $# -ge 3 ]] && ! _is_valid_y "$y"; then
 		echo "$0: $y: Invalid argument" >&2
 		_help
 		exit 1
@@ -136,4 +136,95 @@ Value must be provided either:
 EOF
 }
 
+# Return: <width>\n<height>
+_get_screen_size()
+{
+	# TODO: Check if it is still working with multiple monitors
+	# https://superuser.com/questions/196532/how-do-i-find-out-my-screen-resolution-from-a-shell-script
+	cat /sys/class/graphics/*/virtual_size | head -n1 | sed 's/,/\n/'
+}
+
+# Args: <media> <x> <y> <width> <height> # TODO: Better fill this
+_parse_parameters()
+{
+	MEDIA=$1
+	local x=$2
+	local y=$3
+	local width=$4
+	local height=$5
+	_validate_parameters "$@"
+	read -d "\n" S_WIDTH S_HEIGHT <<< $(_get_screen_size)
+	read -d "\n" M_WIDTH M_HEIGHT <<< $(_get_media_size $MEDIA)
+
+	if [[ -z "$width" ]]; then
+		W_WIDTH=$((S_WIDTH/10)) # 10 * S_WIDTH / 100
+	else
+		read W_WIDTH <<< $(_convert_size "$width" "$S_WIDTH")
+	fi
+	if [[ -z "$height" ]]; then
+		W_HEIGHT=$((W_WIDTH*M_HEIGHT/M_WIDTH))
+	else
+		read W_HEIGHT <<< $(_convert_size "$height" "$S_HEIGHT")
+	fi
+
+	if [[ -z "$x" ]]; then
+		POS_X=$(((S_WIDTH - W_WIDTH)/2))
+	else
+		read POS_X <<< $(_convert_pos "$x" "$S_WIDTH" "$W_WIDTH")
+	fi
+	if [[ -z "$y" ]]; then
+		POS_Y=$(((S_HEIGHT - W_HEIGHT)/2))
+	else
+		read POS_Y <<< $(_convert_pos "$y" "$S_HEIGHT" "$W_HEIGHT")
+	fi
+}
+
+# Args: <media>
+_get_media_size()
+{
+	ffprobe -v error -select_streams v:0 -show_entries stream=width,height ~/conga/res/conga-343.mp4 | tail -n +2 | head -n -1 | sed -r 's/[^0-9]//g'
+}
+
+# Args: <size> <max_size>
+# Return: <converted_size>
+_convert_size()
+{
+	if [[ $# -lt 2 ]]; then
+		echo "Usage: $0 <size> <max_size>" >&2
+		exit 1
+	fi
+	local size=$1
+	local max_size=$2
+	if [[ $size = *"%" ]]; then
+		size=$(echo $size | sed 's/%//g')
+		size=$((size * max_size / 100))
+	fi
+	echo "$size"
+}
+
+# Args: <pos> <screen_size> <window_size>
+# Return: <converted_pos>
+_convert_pos()
+{
+	if [[ $# -lt 3 ]]; then
+		echo "Usage: $0 <pos> <screen_size> <window_size>" >&2
+		exit 1
+	fi
+	local pos=$1
+	local screen_size=$2
+	local window_size=$3
+	if [[ $pos = "left" || $pos = "top" ]]; then
+		pos=0
+	elif [[ $pos = "center" ]]; then
+		pos=50%
+	elif [[ $pos = "right" || $pos = "bottom" ]]; then
+		pos=100%
+	fi
+	if [[ $pos = *"%" ]]; then
+		pos=$(echo $pos | sed 's/%//g')
+		m=$((screen_size - window_size))
+		pos=$((m * pos / 100))
+	 fi
+	echo $pos
+}
 _main "$@"; exit
