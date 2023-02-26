@@ -250,8 +250,11 @@ _start_media()
 	local y="$3"
 	local width="$4"
 	local height="$5"
-#	mpv $media --no-input-terminal --geometry="${width}x${height}+${x}+${y}" --loop > /dev/null 2>&1 &
-	pqiv -i -c --action="set_scale_mode_fit_px($width, $height)" $media > /dev/null 2>&1 &
+	if [[ $media =~ ^.*\.gif$ ]]; then
+		pqiv -i -c --action="set_scale_mode_fit_px($width, $height)" $media > /dev/null 2>&1 &
+	else
+		mpv $media --no-input-terminal --geometry="${width}x${height}+${x}+${y}" --loop > /dev/null 2>&1 &
+	fi
 	local pid=$!
 	local window_media_id=$(_wait_for_window_id_from_pid "$pid")
 	echo -e "$window_media_id\n$pid"
