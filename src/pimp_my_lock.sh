@@ -36,7 +36,6 @@ _validate_parameters()
 	local width="$4"
 	local height="$5"
 
-	# TODO Test if mpv could read the file
 	if [ ! -f "$media" ]; then
 		echo "$0: $media: No such file or directory" >&2
 		exit 1
@@ -153,7 +152,7 @@ _get_screen_size()
 	cat /sys/class/graphics/*/virtual_size | head -n1 | sed 's/,/\n/'
 }
 
-# Args: <media> <x> <y> <width> <height> # TODO: Better fill this
+# Args: <media> <x> <y> <width> <height>
 _parse_parameters()
 {
 	MEDIA=$1
@@ -283,7 +282,6 @@ _wait_for_ft_lock()
 	# TODO Check if it is the right process and not an other window named ft_lock
 	until (xwininfo -name ft_lock 2> /dev/null | grep "IsViewable" > /dev/null 2>&1) ; do
 		true
-		#local =$(xwininfo -tree -root | awk '{if ($2 == "\x22ft_lock\x22\x3A") print $0}')
 	done
 }
 
