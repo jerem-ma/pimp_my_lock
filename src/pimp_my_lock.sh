@@ -10,6 +10,7 @@ _main()
 	ft_lock
 	_wait_for_ft_lock
 	read -d "\n" window_id pid <<< $(_start_media "$MEDIA" "$POS_X" "$POS_Y" "$W_WIDTH" "$W_HEIGHT")
+	_bring_window_to_top "$window_id"
 }
 
 # Args: Same as main
@@ -277,6 +278,20 @@ _wait_for_ft_lock()
 		true
 		#local =$(xwininfo -tree -root | awk '{if ($2 == "\x22ft_lock\x22\x3A") print $0}')
 	done
+}
+
+# Args: <window_id>
+_bring_window_to_top()
+{
+	if [ $# -lt 1 ]; then
+		echo "Usage: $0 <window_id>" >&2
+		exit 1
+	fi
+	local window_id=$1
+	xdotool set_window --overrideredirect 1 $window_id
+	xdotool windowunmap --sync $window_id
+	xdotool windowmap --sync $window_id
+	xdotool windowraise $window_id
 }
 
 _main "$@"; exit
