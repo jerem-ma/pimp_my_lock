@@ -327,6 +327,7 @@ _move_window()
 	local window_id="$1"
 	local x="$2"
 	local y="$3"
+	sleep 1
 	xdotool windowmove --sync "$window_id" "$x" "$y"
 }
 
