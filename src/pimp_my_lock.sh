@@ -20,7 +20,7 @@ _main()
 
 _check_dependencies()
 {
-	local dependencies=(ft_lock head column sed cat ffprobe tail pqiv mpv xwininfo grep awk wmctrl xdotool)
+	local dependencies=(ft_lock head column sed cat mediainfo tail pqiv mpv xwininfo grep awk wmctrl xdotool)
 	for dependency in ${dependencies[@]}; do
 		command -v $dependency > /dev/null 2>&1
 		if [[ $? -ne 0 ]]; then
@@ -208,7 +208,7 @@ _get_media_size()
 		exit 1
 	fi
 	local media="$1"
-	ffprobe -v error -select_streams v:0 -show_entries stream=width,height "$media" | tail -n +2 | head -n -1 | sed -r 's/[^0-9]//g'
+	mediainfo "$media" | grep -E "(Width|Height)" | awk '{print $3}'
 }
 
 # Args: <size> <max_size>
