@@ -38,7 +38,7 @@ If any file are missing during build, try using `apt-file`. See [here](https://w
 
 ## Usage at 42Paris
 ```bash
-/sgoinfre/goinfre/Perso/jmaia/Public/pimp_my_lock_v2/pimp_my_lock.sh <path_to_media> [<x> <y> [<width> <height>]]
+/sgoinfre/goinfre/Perso/jmaia/Public/pimp_my_lock_v2/pimp_my_lock <path_to_media> [<x> <y> [<width> <height>]]
 ```
 
 Values can be percents or keywords. See help using `/sgoinfre/goinfre/Perso/jmaia/Public/pimp_my_lock_v2/pimp_my_lock` without arguments
