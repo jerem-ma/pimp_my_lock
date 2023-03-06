@@ -1,7 +1,7 @@
 # Pimp my lock
 You've got to pimp my lock !
 
-![output](https://user-images.githubusercontent.com/59874848/223180437-5714a14d-59b5-431c-a334-d25244768233.gif)
+![output1](https://user-images.githubusercontent.com/59874848/223180930-248129a1-7193-40f1-abc0-7383db35c83b.gif)
 
 ## Installation
 If you are logged at 42Paris, you can skip to [Usage at 42Paris](#usage-at-42paris) section
